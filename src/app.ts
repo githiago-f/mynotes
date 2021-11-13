@@ -1,27 +1,14 @@
+import { noteController } from 'controllers/NoteController';
 import express from 'express';
-import { logger } from 'helpers/logger';
-import { RedisClient } from 'helpers/redisConnection';
+import { disconnectMiddleware } from 'helpers/disconnect-all';
+import { middleware } from 'helpers/redisConnection';
 
 const app = express();
 
-app.use(async (req, res, next) => {
-  const client = await RedisClient();
-  (req as any).redisClient = client;
-  next();
-});
+app.use(middleware);
 
-app.get('/', async (req, res, next) => {
-  logger.info('Still counting');
-  const client = (req as any).redisClient;
-  const currentCount = parseInt(await client.get('count') || '1');
-  await client.set('count',  String(currentCount+1));
-  res.end('Contagem: ' + currentCount);
-  next();
-});
+app.use('/api/v1/notes', noteController());
 
-app.use(async (req, res, next) => {
-  const client = (req as any).redisClient;
-  await client.disconnect();
-});
+app.use(disconnectMiddleware);
 
 export { app };
