@@ -1,6 +1,7 @@
 import { STRING, UUID, UUIDV4 } from 'sequelize';
-import { InitOptions, Model } from 'sequelize';
+import { Model } from 'sequelize';
 import { compare } from 'bcrypt';
+import { sequelize } from 'helpers/sequelize';
 
 class User extends Model {
   public static findByEmail(email: string): Promise<User | null> {
@@ -13,6 +14,12 @@ class User extends Model {
 
   public validPassword(normalPassword: string) {
     return compare(normalPassword, this.getDataValue('password'))
+  }
+
+  public toJSON() {
+    const copy = Object.assign({}, this.get());
+    delete copy.password;
+    return copy;
   }
 }
 User.init({
@@ -29,6 +36,8 @@ User.init({
   password: {
     type: STRING
   }
-}, {} as InitOptions<User>);
+}, { sequelize });
+
+(async () => await sequelize.sync({ force: true }))();
 
 export { User };

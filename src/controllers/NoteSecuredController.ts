@@ -1,5 +1,15 @@
 import { Router } from "express"
 
 export const noteSecuredController = () => {
-  return Router();
+  const router = Router();
+
+  router.get('/', (req, res, next) => {
+    // TODO get all notes for current user
+  });
+
+  router.post('/', (req, res, next) => {
+    // TODO create a new note for current user
+  });
+
+  return router;
 }

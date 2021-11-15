@@ -1,14 +1,14 @@
 import { Sequelize } from 'sequelize';
 import { logger } from './logger';
 
-export const sequelizeMiddleware:Express.MyRequestHandler = async (req, res, next) => {
-  const accessUrl = process.env.NODE_ENV === 'test' ?
+const accessUrl = process.env.NODE_ENV === 'test' ?
     'sqlite::memory:' :
     (process.env.SQL_URL as string);
-  const sequelize = new Sequelize(accessUrl, {
-    logging: logger.debug
-  });
+export const sequelize = new Sequelize(accessUrl, {
+  logging: logger.debug
+});
 
+(async () => {
   try {
     logger.info('Testing SQL connection');
     await sequelize.authenticate();
@@ -16,6 +16,5 @@ export const sequelizeMiddleware:Express.MyRequestHandler = async (req, res, nex
   } catch(e) {
     logger.error(e);
   }
-  next();
-};
+})();
 
