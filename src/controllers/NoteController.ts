@@ -15,5 +15,13 @@ export const noteController = () => {
     }
   });
 
+  router.post('/', async (req, res, next) => {
+    // TODO create a new note
+  });
+
+  router.patch('/:id', async (req, res, next) => {
+    // TODO edit existing note
+  });
+
   return router;
 }

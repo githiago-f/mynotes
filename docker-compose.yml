@@ -1,8 +1,27 @@
 version: '3.9'
 
+volumes:
+  database:
+    driver: local
+  redis:
+    driver: local
+
 services:
   redis:
     image: redis
-    command: 'redis-server --requirepass Redis2019!'
+    command: 'redis-server --requirepass RedisPASS'
     ports:
       - '6379:6379'
+    volumes:
+      - redis:/var/lib/redis
+  mysql:
+    image: mysql
+    ports:
+      - 3306:3306
+    volumes:
+      - database:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=mynotes
+      - MYSQL_USER=mynotes
+      - MYSQL_PASSWORD=pass123
