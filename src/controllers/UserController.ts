@@ -1,4 +1,4 @@
-import { Router } from "express"
+import { Router } from 'express';
 
 export const userController = () => {
   const router = Router();
@@ -12,4 +12,4 @@ export const userController = () => {
   });
 
   return router;
-}
+};

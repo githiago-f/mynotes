@@ -4,9 +4,11 @@
   "main": "./src/autoload.ts",
   "license": "MIT",
   "scripts": {
-    "dev": "npx ts-node-dev --rs -r tsconfig-paths/register ."
+    "dev": "npx ts-node-dev --rs -r tsconfig-paths/register .",
+    "lint": "npx eslint -c .eslintrc.yml ./src/**"
   },
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "morgan": "^1.10.0",
@@ -20,9 +22,12 @@
     "sqlite3": "^5.0.2"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
     "@types/express": "^4.17.13",
     "@types/morgan": "^1.9.3",
     "@types/node": "^16.11.7",
+    "@types/passport": "^1.0.7",
+    "@types/passport-http": "^0.3.9",
     "@types/pino": "^7.0.5",
     "@types/pino-pretty": "^4.7.2",
     "@types/redis": "^2.8.32",

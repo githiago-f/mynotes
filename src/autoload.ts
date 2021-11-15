@@ -9,6 +9,8 @@ logger.info('Loading env file at: ' + envPaht);
 env.config({ path: envPaht });
 logger.info('envfile loaded!');
 
-require('./app').app.listen(3000, '0.0.0.0', () => {
+import { app } from 'app';
+
+app.listen(3000, '0.0.0.0', () => {
   logger.info('Listening at 0.0.0.0:3000');
 });

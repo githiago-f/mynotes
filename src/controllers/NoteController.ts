@@ -1,5 +1,5 @@
-import { Router } from "express"
-import { logger } from "helpers/logger";
+import { Router } from 'express';
+import { logger } from 'helpers/logger';
 
 export const noteController = () => {
   const router = Router();
@@ -24,4 +24,4 @@ export const noteController = () => {
   });
 
   return router;
-}
+};
