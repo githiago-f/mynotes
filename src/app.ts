@@ -7,6 +7,7 @@ import { redisMiddleware } from 'helpers/redisConnection';
 import { passportMiddleware } from 'helpers/passport';
 import { noteSecuredController } from 'controllers/NoteSecuredController';
 import { userController } from 'controllers/UserController';
+import passport from 'passport';
 
 const app = express();
 
@@ -16,6 +17,8 @@ app.use(express.urlencoded({
   inflate: true,
   extended: false
 }));
+
+app.use(passport.initialize());
 
 app.use(redisMiddleware);
 

@@ -5,6 +5,7 @@ export const noteSecuredController = () => {
 
   router.get('/', (req, res, next) => {
     // TODO get all notes for current user
+    res.end('Authenticated!');
   });
 
   router.post('/', (req, res, next) => {

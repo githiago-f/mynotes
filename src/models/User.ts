@@ -4,6 +4,7 @@ import { compare } from 'bcrypt';
 import { sequelize } from 'helpers/sequelize';
 
 class User extends Model {
+  public _id!: string;
   public static findByEmail(email: string): Promise<User | null> {
     return User.findOne({
       where: {
@@ -25,13 +26,16 @@ class User extends Model {
 User.init({
   _id: {
     type: UUID,
+    unique: true,
+    primaryKey: true,
     defaultValue: UUIDV4
   },
   name: {
     type: STRING
   },
   email: {
-    type: STRING
+    type: STRING,
+    unique: true
   },
   password: {
     type: STRING

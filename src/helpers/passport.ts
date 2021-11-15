@@ -13,5 +13,20 @@ const basic = new BasicStrategy(async (username, password, done) => {
 
 passport.use('basic', basic);
 
+passport.serializeUser((user, done) => {
+  if(user)
+    done(null, (user as any)._id);
+  else
+    done('User not found!');
+});
+
+passport.deserializeUser(async (id: string, done) => {
+  const user = await User.findByPk(id);
+  if(user)
+    done(null, user);
+  else
+    done('User not found!');
+});
+
 export const passportMiddleware = passport.authenticate('basic');
 
