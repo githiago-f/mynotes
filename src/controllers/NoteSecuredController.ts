@@ -1,4 +1,4 @@
-import { Router } from "express"
+import { Router } from 'express';
 
 export const noteSecuredController = () => {
   const router = Router();
@@ -13,4 +13,4 @@ export const noteSecuredController = () => {
   });
 
   return router;
-}
+};

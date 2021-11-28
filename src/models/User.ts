@@ -14,7 +14,7 @@ class User extends Model {
   }
 
   public validPassword(normalPassword: string) {
-    return compare(normalPassword, this.getDataValue('password'))
+    return compare(normalPassword, this.getDataValue('password'));
   }
 
   public toJSON() {

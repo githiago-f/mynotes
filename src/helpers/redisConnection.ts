@@ -1,5 +1,4 @@
 import { createClient } from 'redis';
-import { RedisClientType } from 'redis/dist/lib/client';
 import { logger } from './logger';
 
 const url = `redis://:${process.env.REDIS_PASSWORD}@${process.env.REDIS_HOST}`;
@@ -12,13 +11,12 @@ const RedisClient = async () => {
     return client;
   } catch(e) {
     logger.error(e);
-    return {} as RedisClientType<{}, {}>;
+    return null;
   }
 };
 
 const redisMiddleware: Express.MyRequestHandler = async (req, res, next) => {
-  const client = await RedisClient();
-  req.client = client;
+  req.redis = await RedisClient();
   next();
 };
 

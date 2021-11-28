@@ -9,13 +9,13 @@ const basic = new BasicStrategy(async (username, password, done) => {
     return done(null, user);
   }
   return done('Email or password are invalid', null);
-})
+});
 
 passport.use('basic', basic);
 
 passport.serializeUser((user, done) => {
   if(user)
-    done(null, (user as any)._id);
+    done(null, (user as User)._id);
   else
     done('User not found!');
 });

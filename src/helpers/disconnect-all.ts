@@ -1,5 +1,5 @@
 export const disconnectMiddleware: Express.MyRequestHandler = async (req, res, next) => {
-  if(req.client)
-    await req.client.disconnect();
+  if(req.redis)
+    await req.redis.disconnect();
   next();
 };

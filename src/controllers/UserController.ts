@@ -7,7 +7,7 @@ import { hash } from 'bcrypt';
 export const userController = () => {
   const router = Router();
 
-  router.post('/', makeValidateBody(UserDTO), async (req, res, next) => {
+  router.post('/register', makeValidateBody(UserDTO), async (req, res, next) => {
     const userDTO = req.body as UserDTO;
 
     const user = await User.create({
@@ -19,7 +19,7 @@ export const userController = () => {
     next();
   });
 
-  router.get('/', (req, res) => {
+  router.post('/login', (req, res) => {
     // TODO get user
   });
 

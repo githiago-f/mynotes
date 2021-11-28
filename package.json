@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "npx ts-node-dev --rs -r tsconfig-paths/register .",
-    "lint": "npx eslint -c .eslintrc.yml ./src/**"
+    "lint": "npx eslint -c .eslintrc.yml ./src"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",
