@@ -18,7 +18,7 @@ export const noteController = () => {
       });
       req.redis?.set('notes', JSON.stringify(notes));
       return res.json(notes);
-    }catch(e) {
+    } catch(e) {
       logger.error(e);
       next(e);
     }

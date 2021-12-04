@@ -1,14 +1,20 @@
+import { Unauthorized } from 'controllers/errors/AuthErrors';
 import { User } from 'models/User';
 import passport from 'passport';
 import { BasicStrategy } from 'passport-http';
+import { hash } from 'bcrypt';
 
 const basic = new BasicStrategy(async (username, password, done) => {
   const user = await User.findByEmail(username);
-  const isPasswordValid = user?.validPassword(password) || false;
+  await hash('a', 10);
+  if(!user) {
+    return done(new Unauthorized());
+  }
+  const isPasswordValid = await user.validPassword(password);
   if(isPasswordValid) {
     return done(null, user);
   }
-  return done('Email or password are invalid', null);
+  return done(new Unauthorized());
 });
 
 passport.use('basic', basic);
@@ -17,7 +23,7 @@ passport.serializeUser((user, done) => {
   if(user)
     done(null, (user as User)._id);
   else
-    done('User not found!');
+    done(new Unauthorized());
 });
 
 passport.deserializeUser(async (id: string, done) => {
@@ -25,7 +31,7 @@ passport.deserializeUser(async (id: string, done) => {
   if(user)
     done(null, user);
   else
-    done('User not found!');
+    done(new Unauthorized());
 });
 
 export const passportMiddleware = passport.authenticate('basic');

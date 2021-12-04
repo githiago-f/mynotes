@@ -1,8 +1,10 @@
 import { IsEmail, Length, IsNotEmpty } from 'class-validator';
+import { Unique } from 'models/validators/UniqueValidator';
 
 export class UserDTO {
   @IsNotEmpty()
   @IsEmail()
+  @Unique()
   public readonly email!: string;
 
   @IsNotEmpty()

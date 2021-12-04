@@ -8,6 +8,7 @@ import { passportMiddleware } from 'helpers/passport';
 import { noteSecuredController } from 'controllers/NoteSecuredController';
 import { userController } from 'controllers/UserController';
 import passport from 'passport';
+import { errorHandleController } from 'controllers/ErrorHandleController';
 
 const app = express();
 
@@ -25,8 +26,12 @@ app.use(redisMiddleware);
 app.use('/api/v1/notes', noteController());
 app.use('/api/v1/users', userController());
 
-app.use('/api/v1/notes/private', passportMiddleware, noteSecuredController());
+app.use(passportMiddleware);
+
+app.use('/api/v1/users/me/notes', noteSecuredController());
+app.use('/api/v1/users/:id/notes', noteSecuredController());
 
 app.use(disconnectMiddleware);
+app.use(errorHandleController);
 
 export { app };

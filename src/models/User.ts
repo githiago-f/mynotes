@@ -5,6 +5,10 @@ import { sequelize } from 'helpers/sequelize';
 
 class User extends Model {
   public _id!: string;
+  public readonly name: string = this.get('name');
+  public readonly email: string = this.get('email');
+  public readonly password: string = this.get('password');
+
   public static findByEmail(email: string): Promise<User | null> {
     return User.findOne({
       where: {
