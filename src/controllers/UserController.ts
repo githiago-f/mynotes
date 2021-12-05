@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import { User } from 'models/User';
+import { User } from 'domain/entity/User';
 import { makeValidateBody } from 'express-class-validator';
-import { UserDTO } from './dto/UserDTO';
+import { UserDTO } from 'domain/dto/UserDTO';
 import { hash } from 'bcrypt';
 
 export const userController = () => {

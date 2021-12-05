@@ -1,16 +1,22 @@
 import { noteController } from 'controllers/NoteController';
 import express from 'express';
 import 'helpers/sequelize';
-import { disconnectMiddleware } from 'helpers/disconnect-all';
 import { expressLogger } from 'helpers/logger';
-import { redisMiddleware } from 'helpers/redisConnection';
 import { passportMiddleware } from 'helpers/passport';
 import { noteSecuredController } from 'controllers/NoteSecuredController';
 import { userController } from 'controllers/UserController';
-import passport from 'passport';
 import { errorHandleController } from 'controllers/ErrorHandleController';
+import passport from 'passport';
+import { RedisService } from 'domain/service/RedisService';
+import { RedisClient } from 'helpers/redisConnection';
 
 const app = express();
+
+app.use((req, res, next) => {
+  req.headers['access-control-allow-methods'] = 'GET, OPTIONS';
+  req.headers['x-powered-by'] = 'None of your business :)';
+  next();
+});
 
 app.use(expressLogger);
 app.use(express.json());
@@ -21,17 +27,14 @@ app.use(express.urlencoded({
 
 app.use(passport.initialize());
 
-app.use(redisMiddleware);
+const globalRedisService = new RedisService(RedisClient());
 
-app.use('/api/v1/notes', noteController());
+app.use('/api/v1/notes', noteController(globalRedisService));
 app.use('/api/v1/users', userController());
 
-app.use(passportMiddleware);
+app.use('/api/v1/users/me/notes', passportMiddleware, noteSecuredController());
+app.use('/api/v1/users/:id/notes', passportMiddleware, noteSecuredController());
 
-app.use('/api/v1/users/me/notes', noteSecuredController());
-app.use('/api/v1/users/:id/notes', noteSecuredController());
-
-app.use(disconnectMiddleware);
 app.use(errorHandleController);
 
 export { app };

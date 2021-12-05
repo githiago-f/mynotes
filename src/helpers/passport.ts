@@ -1,5 +1,5 @@
 import { Unauthorized } from 'controllers/errors/AuthErrors';
-import { User } from 'models/User';
+import { User } from 'domain/entity/User';
 import passport from 'passport';
 import { BasicStrategy } from 'passport-http';
 import { hash } from 'bcrypt';

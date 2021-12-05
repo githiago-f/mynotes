@@ -1,7 +1,7 @@
 declare namespace Express {
   export interface Request {
     redis?:  import('redis/dist/lib/client').RedisClientType<{}, {}> | null;
-    user?: import('models/User').User,
+    user?: import('domain/entity/User').User,
     sequelize: import('sequelize/types').Sequelize
   }
 

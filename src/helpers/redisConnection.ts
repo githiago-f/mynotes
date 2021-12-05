@@ -1,27 +1,14 @@
 import { createClient } from 'redis';
 import { logger } from './logger';
 
-const url = `redis://:${process.env.REDIS_PASSWORD}@${process.env.REDIS_HOST}`;
+const redisLogger = logger.child({
+  name: 'RedisClient'
+});
 
-const RedisClient = async () => {
-  try {
-    const client = createClient({ url });
-    await client.connect();
-    logger.debug('Load redis client');
-    return client;
-  } catch(e) {
-    logger.error(e);
-    return null;
-  }
-};
+const url = process.env.REDIS_URL || `redis://:${process.env.REDIS_PASSWORD}@${process.env.REDIS_HOST}`;
 
-const redisMiddleware: Express.MyRequestHandler = async (req, res, next) => {
-  req.redis = await RedisClient();
-  next();
-};
-
-
-export {
-  RedisClient,
-  redisMiddleware
+export const RedisClient = () => {
+  const client = createClient({ url });
+  redisLogger.debug('Load redis client');
+  return client;
 };

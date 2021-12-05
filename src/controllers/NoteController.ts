@@ -1,25 +1,25 @@
 import { Router } from 'express';
 import { logger } from 'helpers/logger';
-import { Note } from 'models/Note';
+import { NoteRepository } from 'domain/repository/NoteRepository';
+import { NotesService } from 'domain/service/NotesService';
+import { RedisService } from 'domain/service/RedisService';
 
-export const noteController = () => {
+const LOG = logger.child({
+  name: '@NoteController'
+});
+
+export const noteController = (redisService: RedisService) => {
   const router = Router();
+  const noteRepository = new NoteRepository();
+  const notesService = new NotesService(noteRepository, redisService);
 
   router.get('/', async (req, res, next) => {
     try {
-      const result = await req.redis?.get('notes');
-      if(result) {
-        return res.status(200).json(JSON.parse(result || '[]'));
-      }
-      const notes = await Note.findAll({
-        where: {
-          visible: true
-        }
-      });
-      req.redis?.set('notes', JSON.stringify(notes));
-      return res.json(notes);
+      const page = parseInt(req.query?.page as string || '0');
+      const data = await notesService.getNotesPaged(page);
+      return res.json(data);
     } catch(e) {
-      logger.error(e);
+      LOG.error(e);
       next(e);
     }
   });

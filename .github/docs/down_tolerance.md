@@ -8,8 +8,6 @@ This application should not fall until the database isn't accessible.
 
 ### Redis
 
-Redis isn't
-
 ### MySQL
 
 ### Messaging application (not known yet)

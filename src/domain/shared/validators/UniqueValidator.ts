@@ -5,8 +5,8 @@ import {
 } from 'class-validator';
 import { sequelize } from 'helpers/sequelize';
 
-export function Unique(validationOptions?: ValidationOptions) {
-  return function (object: Function, propertyName: string) {
+export function Unique(model: string, validationOptions?: ValidationOptions) {
+  return function (object: Object, propertyName: string) {
     registerDecorator({
       name: 'Unique',
       target: object.constructor,
@@ -16,10 +16,10 @@ export function Unique(validationOptions?: ValidationOptions) {
       async: true,
       validator: {
         defaultMessage() {
-          return 'E-mail already taken';
+          return 'E-mail already in use';
         },
         async validate(value: any, args: ValidationArguments) {
-          const data = await sequelize.model('User').findAll({
+          const data = await sequelize.model(model).findAll({
             where: { [propertyName]: value }
           });
           if(data instanceof Array && data.length > 0) {
