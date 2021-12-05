@@ -1,6 +1,6 @@
-import { Note } from "domain/entity/Note";
-import { NoteRepository } from "domain/repository/NoteRepository";
-import { RedisService } from "./RedisService";
+import { Note } from 'domain/entity/Note';
+import { NoteRepository } from 'domain/repository/NoteRepository';
+import { RedisService } from './RedisService';
 
 export class NotesService {
   private readonly REDIS_BASE_KEY = 'notes:page-';

@@ -9,12 +9,15 @@ import { errorHandleController } from 'controllers/ErrorHandleController';
 import passport from 'passport';
 import { RedisService } from 'domain/service/RedisService';
 import { RedisClient } from 'helpers/redisConnection';
+import { healthyController } from 'controllers/HealthyController';
 
 const app = express();
 
 app.use((req, res, next) => {
-  req.headers['access-control-allow-methods'] = 'GET, OPTIONS';
-  req.headers['x-powered-by'] = 'None of your business :)';
+  res.set({
+    'access-control-allow-methods': 'GET, OPTIONS',
+    'x-powered-by': 'None of your business :)'
+  });
   next();
 });
 
@@ -29,9 +32,14 @@ app.use(passport.initialize());
 
 const globalRedisService = new RedisService(RedisClient());
 
+app.use('/health', healthyController());
 app.use('/api/v1/notes', noteController(globalRedisService));
 app.use('/api/v1/users', userController());
 
+/**
+ * these routes will be replaced.
+ * Will use RBAC
+ */
 app.use('/api/v1/users/me/notes', passportMiddleware, noteSecuredController());
 app.use('/api/v1/users/:id/notes', passportMiddleware, noteSecuredController());
 

@@ -4,7 +4,7 @@ import { Unique } from 'domain/shared/validators/UniqueValidator';
 export class UserDTO {
   @IsNotEmpty()
   @IsEmail()
-  @Unique('User')
+  @Unique('User', { message: 'E-mail already in use!' })
   public readonly email!: string;
 
   @IsNotEmpty()

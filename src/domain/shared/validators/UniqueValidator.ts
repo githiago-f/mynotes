@@ -16,7 +16,7 @@ export function Unique(model: string, validationOptions?: ValidationOptions) {
       async: true,
       validator: {
         defaultMessage() {
-          return 'E-mail already in use';
+          return  (validationOptions?.message as string) || 'Already in use';
         },
         async validate(value: any, args: ValidationArguments) {
           const data = await sequelize.model(model).findAll({
@@ -26,8 +26,8 @@ export function Unique(model: string, validationOptions?: ValidationOptions) {
             return false;
           }
           return true;
-        },
+        }
       },
     });
-  }
+  };
 }

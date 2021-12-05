@@ -1,5 +1,5 @@
-import { logger } from "helpers/logger";
-import { RedisClientType } from "redis/dist/lib/client";
+import { logger } from 'helpers/logger';
+import { RedisClientType } from 'redis/dist/lib/client';
 
 export class RedisService {
   private readonly logger = logger.child({
@@ -14,12 +14,11 @@ export class RedisService {
     try {
       await this.redis?.connect();
       const redisJSONResult = await this.redis?.get(key) || '[]';
-
       result = JSON.parse(redisJSONResult) as T;
     } catch(e) {
       this.logger.error(e);
     }
-    await this.redis?.disconnect();
+    await this.disconnect();
     return result;
   }
 
@@ -32,6 +31,14 @@ export class RedisService {
     } catch(e) {
       this.logger.error(e);
     }
-    await this.redis?.disconnect();
+    await this.disconnect();
+  }
+
+  public async disconnect() {
+    try {
+      await this.redis?.disconnect();
+    } catch(e) {
+      this.logger.error(e);
+    }
   }
 }

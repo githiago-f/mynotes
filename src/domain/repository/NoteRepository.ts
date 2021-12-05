@@ -1,4 +1,4 @@
-import { Note } from "domain/entity/Note";
+import { Note } from 'domain/entity/Note';
 
 export class NoteRepository {
   public findPaged(page?: number): Promise<Note[]> {

@@ -12,4 +12,4 @@ export const errorHandleController: ErrorRequestHandler = (error: Error, req, re
     .json({
       message: error.message
     });
-}
+};
