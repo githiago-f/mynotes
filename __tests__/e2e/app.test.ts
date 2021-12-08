@@ -9,5 +9,7 @@ describe('# Application', () => {
       healthy: true,
       message: 'I\'m healthy!'
     });
+    expect(response.get('x-powered-by'))
+      .toBe('None of your business :)');
   });
 });

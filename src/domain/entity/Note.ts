@@ -1,12 +1,11 @@
-import { STRING, UUID, UUIDV4 } from 'sequelize';
-import { Model } from 'sequelize';
+import { DATE, STRING, UUID, UUIDV4, BOOLEAN, Model } from 'sequelize';
 import { sequelize } from 'helpers/sequelize';
-import { BOOLEAN } from 'sequelize';
 
 class Note extends Model {
   public readonly _id!: string;
   public readonly title: string;
   public readonly content!: string;
+  public readonly createdAt: Date;
   public readonly visible: boolean;
 
   constructor() {
@@ -16,13 +15,15 @@ class Note extends Model {
     this.content = self.content;
     this.visible = self.visible;
     this.title = self.title;
+    this.createdAt = self.date;
   }
 }
 
 Note.init({
   _id: {
     type: UUID,
-    defaultValue: UUIDV4
+    defaultValue: UUIDV4,
+    primaryKey: true
   },
   title: {
     type: STRING,
@@ -37,6 +38,18 @@ Note.init({
   visible: {
     type: BOOLEAN,
     defaultValue: true
+  },
+  createdAt: {
+    type: DATE,
+    defaultValue: sequelize.Sequelize.literal('CURRENT_TIMESTAMP')
+  },
+  author: {
+    type: UUID,
+    defaultValue: UUIDV4,
+    references: {
+      model: 'Users',
+      key: '_id'
+    }
   }
 }, { sequelize });
 

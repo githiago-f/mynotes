@@ -6,39 +6,47 @@ export class RedisService {
     name: RedisService.name
   });
 
+  private isConnected = false;
+
   constructor(
     private redis?: RedisClientType | null) {}
 
-  public async getCachedByKey<T>(key: string) {
-    let result = [] as unknown;
+  private async connect() {
+    if(this.isConnected) return;
     try {
       await this.redis?.connect();
-      const redisJSONResult = await this.redis?.get(key) || '[]';
-      result = JSON.parse(redisJSONResult) as T;
+      this.isConnected = true;
+
+      this.redis?.on('error', async (err) => {
+        this.logger.error(err);
+        await this.redis?.quit();
+        this.isConnected = false;
+      });
     } catch(e) {
-      this.logger.error(e);
+      this.logger.error((e as Error).message);
     }
-    await this.disconnect();
-    return result;
+  }
+
+  public async getCachedByKey<T>(key: string) {
+    try {
+      await this.connect();
+      const redisJSONResult = await this.redis?.get(key) || '[]';
+      return JSON.parse(redisJSONResult) as T;
+    } catch(e) {
+      this.logger.error((e as Error).message);
+    }
   }
 
   public async storeDataInCache(key: string, data: any[]) {
     try {
-      await this.redis?.connect();
+      await this.connect();
       if(data.length > 0) {
-        await this.redis?.set(key, JSON.stringify(data));
+        await this.redis?.set(key, JSON.stringify(data), {
+          EX: 1000
+        });
       }
     } catch(e) {
-      this.logger.error(e);
-    }
-    await this.disconnect();
-  }
-
-  public async disconnect() {
-    try {
-      await this.redis?.disconnect();
-    } catch(e) {
-      this.logger.error(e);
+      this.logger.error((e as Error).message);
     }
   }
 }
